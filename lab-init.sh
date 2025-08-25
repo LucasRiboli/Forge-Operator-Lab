@@ -1,0 +1,1 @@
+incus init images:ubuntu/22.04 pod --config limits.memory=1GB
