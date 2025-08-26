@@ -4,7 +4,6 @@ set -e
 DAEMON_NAME="operator"
 GO_BINARY="/usr/local/bin/${DAEMON_NAME}"
 SERVICE_FILE="/etc/systemd/system/${DAEMON_NAME}.service"
-PROJECT_DIR="/home/ral/projetos/labOperators"
 USER_NAME="ral"
 GROUP_NAME="ral"
 
@@ -44,8 +43,6 @@ Environment=GO_ENV=production
 Environment=LOG_LEVEL=info
 Environment=HOME=/home/${USER_NAME}
 
-WorkingDirectory=${PROJECT_DIR}
-
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=${DAEMON_NAME}
@@ -63,12 +60,6 @@ WantedBy=multi-user.target
 EOF
 
 echo "Service: ${SERVICE_FILE}"
-
-
-mkdir -p "${PROJECT_DIR}"
-chown "${USER_NAME}:${GROUP_NAME}" "${PROJECT_DIR}"
-chmod 755 "${PROJECT_DIR}"
-echo "diretorio pronto: ${PROJECT_DIR}"
 
 systemctl daemon-reload
 systemctl enable "${DAEMON_NAME}"
@@ -89,7 +80,7 @@ Testar manualmente o código:
   ${GO_BINARY}
 
 atualizar o binario:
-  o build -o ${DAEMON_NAME} main.go
+  go build -o ${DAEMON_NAME} main.go
   sudo systemctl stop ${DAEMON_NAME}
   sudo install -o root -g root -m 755 ${DAEMON_NAME} ${GO_BINARY}
   sudo systemctl start ${DAEMON_NAME}
