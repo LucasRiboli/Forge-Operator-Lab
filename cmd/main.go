@@ -9,18 +9,23 @@ import (
 	"strings"
 
 	"github.com/google/uuid"
+	"github.com/joho/godotenv"
 	incus "github.com/lxc/incus/client"
 	"github.com/lxc/incus/shared/api"
 	"gopkg.in/yaml.v3"
 )
 
 const (
-	PodPrefix  = "pod"
-	ConfigFile = "/home/ral/projetos/Forge-Operator-Lab/hpa.yaml"
+	PodPrefix = "pod"
 )
 
 func main() {
 	log.Println("INIT HPA Operator action")
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Println("Atenção: Nenhum arquivo .env encontrado. Usando variáveis de ambiente do sistema.")
+	}
 
 	if err := runHPALoop(); err != nil {
 		log.Printf("Erro no HPA: %v", err)
@@ -31,7 +36,13 @@ func main() {
 }
 
 func getConfig() (config.Config, error) {
-	yamlFile, err := os.ReadFile(ConfigFile)
+
+	configFile := os.Getenv("CONFIG_FILE_PATH") // caminho do hpa
+	if configFile == "" {
+		configFile = "./hpa.yaml"
+	}
+
+	yamlFile, err := os.ReadFile(configFile)
 	if err != nil {
 		return config.Config{}, fmt.Errorf("erro ao ler config: %w", err)
 	}
