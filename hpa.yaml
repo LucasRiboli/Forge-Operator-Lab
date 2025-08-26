@@ -2,4 +2,4 @@ HPA:
   minPods: 1
   maxPods: 5
   cpuThreshold: 80
-  memoryThreshold: 70
+  memoryThreshold: 40

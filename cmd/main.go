@@ -16,7 +16,7 @@ import (
 
 const (
 	PodPrefix  = "pod"
-	ConfigFile = "./hpa.yaml"
+	ConfigFile = "/home/ral/projetos/Forge-Operator-Lab/hpa.yaml"
 )
 
 func main() {
@@ -151,6 +151,8 @@ func deletePod(name string) error {
 	if err != nil {
 		return fmt.Errorf("erro ao parar container: %w", err)
 	}
+
+	// tem um bug de estado aqui, voltar para resolver
 
 	op, err = c.DeleteInstance(name)
 	if err != nil {
